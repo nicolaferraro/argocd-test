@@ -1,5 +1,0 @@
-fluent-bit:
-  config:
-    labelMap:
-      ActivityType: "temporal_activity"
-      WorkflowType: "temporal_workflow"

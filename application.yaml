@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+  name: fluentbit-control
+  namespace: argocd
+spec:
+  destination:
+    namespace: kube-system
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    helm:
+      values: |2
+
+        fluent-bit:
+          loki:
+            serviceName: xxx.cloud
+            user: dev
+            password: aaaaa
+            servicePath: /loki/api/v1/push
+          config:
+            labels: '{cluster="staging"}'
+            tenantID: dev
+            labelMap:
+              ActivityType: "temporal_activity"
+              WorkflowType: "temporal_workflow"
+    path: manifests/logging
+    repoURL: https://github.com/nicolaferraro/argocd-test
+    targetRevision: main
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true
